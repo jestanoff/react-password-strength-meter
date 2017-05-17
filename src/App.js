@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import zxcvbn from 'zxcvbn';
+import zxcvbnLoader from './loaders/zxcvbn';
 import './App.css';
 import PasswordField from './Components/PasswordField';
 import Tooltip from './Components/Tooltip';
@@ -17,9 +17,15 @@ class App extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
+    componentWillMount() {
+        zxcvbnLoader().then((deps) => {
+            this.zxcvbn = deps.zxcvbn;
+        });
+    }
+
     handleChange(event) {
         const password = event.target.value;
-        const { score } = zxcvbn(password);
+        const { score } = this.zxcvbn(password);
 
         this.setState({
             password,
